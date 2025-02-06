@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo EvalDecode</title>
+</head>
+<body>
+
+    <h1>Ejemplo de EvalDecode</h1>
+    <form id="codeForm">
+        <label for="sourceCode">Ingresa tu código JavaScript:</label><br>
+        <textarea id="sourceCode" rows="6" cols="50"></textarea><br><br>
+        <input type="submit" value="Ejecutar código">
+    </form>
+
+    <h2>Resultado:</h2>
+    <pre id="result"></pre>
+
+    <script>
+        function EvalDecode(source) {
+            self._eval = self.eval;
+
+            self.eval = (_code) => {
+                self.eval = self._eval;
+                return _code;
+            };
+
+            return self._eval(source);
+        }
+
+        document.getElementById('codeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const code = document.getElementById('sourceCode').value;
+            
+            try {
+                // Pasar el código al EvalDecode y mostrar el resultado
+                const result = EvalDecode(code);
+                document.getElementById('result').textContent = 'Código recibido y evaluado:\n' + result;
+            } catch (e) {
+                document.getElementById('result').textContent = 'Error: ' + e.message;
+            }
+        });
+    </script>
+
+</body>
+</html>
